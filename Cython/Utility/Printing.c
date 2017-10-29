@@ -3,8 +3,8 @@
 
 static int __Pyx_Print(PyObject*, PyObject *, int); /*proto*/
 #if CYTHON_COMPILING_IN_PYPY || PY_MAJOR_VERSION >= 3
-static PyObject* $print_function = 0;
-static PyObject* $print_function_kwargs = 0;
+static PyObject* $print_function = NULL;
+static PyObject* $print_function_kwargs = NULL;
 #endif
 
 ////////////////////// Print.cleanup //////////////////////
@@ -74,8 +74,8 @@ error:
 #else /* Python 3 has a print function */
 
 static int __Pyx_Print(PyObject* stream, PyObject *arg_tuple, int newline) {
-    PyObject* kwargs = 0;
-    PyObject* result = 0;
+    PyObject* kwargs = NULL;
+    PyObject* result = NULL;
     PyObject* end_string;
     if (unlikely(!$print_function)) {
         $print_function = PyObject_GetAttr($builtins_cname, PYIDENT("print"));

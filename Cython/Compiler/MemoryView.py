@@ -56,7 +56,7 @@ _spec_to_abbrev = {
     'follow'  : '_',
 }
 
-memslice_entry_init = "{ 0, 0, { 0 }, { 0 }, { 0 } }"
+memslice_entry_init = "{ NULL, NULL, { 0 }, { 0 }, { 0 } }"
 
 memview_name = u'memoryview'
 memview_typeptr_cname = '__pyx_memoryview_type'

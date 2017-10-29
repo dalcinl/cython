@@ -245,9 +245,9 @@ static CYTHON_INLINE int __Pyx_IterFinish(void) {
             PyObject *exc_value, *exc_tb;
             exc_value = tstate->curexc_value;
             exc_tb = tstate->curexc_traceback;
-            tstate->curexc_type = 0;
-            tstate->curexc_value = 0;
-            tstate->curexc_traceback = 0;
+            tstate->curexc_type = NULL;
+            tstate->curexc_value = NULL;
+            tstate->curexc_traceback = NULL;
             Py_DECREF(exc_type);
             Py_XDECREF(exc_value);
             Py_XDECREF(exc_tb);

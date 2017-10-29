@@ -480,8 +480,8 @@ __Pyx_init_memviewslice(struct __pyx_memoryview_obj *memview,
 fail:
     /* Don't decref, the memoryview may be borrowed. Let the caller do the cleanup */
     /* __Pyx_XDECREF(memviewslice->memview); */
-    memviewslice->memview = 0;
-    memviewslice->data = 0;
+    memviewslice->memview = NULL;
+    memviewslice->data = NULL;
     retval = -1;
 no_fail:
     __Pyx_RefNannyFinishContext();

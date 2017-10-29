@@ -331,7 +331,7 @@ static int __Pyx_TraceSetupAndCall(PyCodeObject** code,
 }
 
 static PyCodeObject *__Pyx_createFrameCodeObject(const char *funcname, const char *srcfile, int firstlineno) {
-    PyCodeObject *py_code = 0;
+    PyCodeObject *py_code = NULL;
 
 #if PY_MAJOR_VERSION >= 3
     py_code = PyCode_NewEmpty(srcfile, funcname, firstlineno);
@@ -340,8 +340,8 @@ static PyCodeObject *__Pyx_createFrameCodeObject(const char *funcname, const cha
         py_code->co_flags |= CO_OPTIMIZED | CO_NEWLOCALS;
     }
 #else
-    PyObject *py_srcfile = 0;
-    PyObject *py_funcname = 0;
+    PyObject *py_srcfile = NULL;
+    PyObject *py_funcname = NULL;
 
     py_funcname = PyString_FromString(funcname);
     if (unlikely(!py_funcname)) goto bad;

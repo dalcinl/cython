@@ -49,8 +49,8 @@ static CYTHON_INLINE PyObject* __Pyx_PyExec2(PyObject* o, PyObject* globals) {
 
 static PyObject* __Pyx_PyExec3(PyObject* o, PyObject* globals, PyObject* locals) {
     PyObject* result;
-    PyObject* s = 0;
-    char *code = 0;
+    PyObject* s = NULL;
+    char *code = NULL;
 
     if (!globals || globals == Py_None) {
         globals = $moddict_cname;
@@ -122,7 +122,7 @@ static PyObject* __Pyx_PyExec3(PyObject* o, PyObject* globals, PyObject* locals)
     return result;
 bad:
     Py_XDECREF(s);
-    return 0;
+    return NULL;
 }
 
 //////////////////// GetAttr3.proto ////////////////////

@@ -159,9 +159,9 @@ static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level); /
 //@substitute: naming
 
 static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
-    PyObject *module = 0;
-    PyObject *empty_dict = 0;
-    PyObject *empty_list = 0;
+    PyObject *module = NULL;
+    PyObject *empty_dict = NULL;
+    PyObject *empty_list = NULL;
     #if PY_MAJOR_VERSION < 3
     PyObject *py_import;
     py_import = __Pyx_PyObject_GetAttrStr($builtins_cname, PYIDENT("__import__"));
@@ -241,10 +241,10 @@ static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name) {
         // 'name' may refer to a (sub-)module which has not finished initialization
         // yet, and may not be assigned as an attribute to its parent, so try
         // finding it by full name.
-        const char* module_name_str = 0;
-        PyObject* module_name = 0;
-        PyObject* module_dot = 0;
-        PyObject* full_name = 0;
+      const char* module_name_str = NULL;
+        PyObject* module_name = NULL;
+        PyObject* module_dot = NULL;
+        PyObject* full_name = NULL;
         PyErr_Clear();
         module_name_str = PyModule_GetName(module);
         if (unlikely(!module_name_str)) { goto modbad; }
@@ -362,10 +362,10 @@ static int ${import_star}(PyObject* m) {
     int i;
     int ret = -1;
     char* s;
-    PyObject *locals = 0;
-    PyObject *list = 0;
+    PyObject *locals = NULL;
+    PyObject *list = NULL;
 #if PY_MAJOR_VERSION >= 3
-    PyObject *utf8_name = 0;
+    PyObject *utf8_name = NULL;
 #endif
     PyObject *name;
     PyObject *item;
@@ -382,7 +382,7 @@ static int ${import_star}(PyObject* m) {
         if (!utf8_name) goto bad;
         s = PyBytes_AS_STRING(utf8_name);
         if (${import_star_set}(item, name, s) < 0) goto bad;
-        Py_DECREF(utf8_name); utf8_name = 0;
+        Py_DECREF(utf8_name); utf8_name = NULL;
 #else
         s = PyString_AsString(name);
         if (!s) goto bad;
@@ -506,7 +506,7 @@ static PyTypeObject *__Pyx_ImportType(PyObject* module, const char *module_name,
 static PyTypeObject *__Pyx_ImportType(PyObject *module, const char *module_name, const char *class_name,
     size_t size, size_t alignment, enum __Pyx_ImportType_CheckSize check_size)
 {
-    PyObject *result = 0;
+    PyObject *result = NULL;
     char warning[200];
     Py_ssize_t basicsize;
     Py_ssize_t itemsize;
@@ -532,8 +532,7 @@ static PyTypeObject *__Pyx_ImportType(PyObject *module, const char *module_name,
     if (!py_basicsize)
         goto bad;
     basicsize = PyLong_AsSsize_t(py_basicsize);
-    Py_DECREF(py_basicsize);
-    py_basicsize = 0;
+    Py_DECREF(py_basicsize); py_basicsize = NULL;
     if (basicsize == (Py_ssize_t)-1 && PyErr_Occurred())
         goto bad;
     py_itemsize = PyObject_GetAttrString(result, "__itemsize__");
@@ -599,8 +598,8 @@ static int __Pyx_ImportFunction(PyObject *module, const char *funcname, void (**
 #ifndef __PYX_HAVE_RT_ImportFunction
 #define __PYX_HAVE_RT_ImportFunction
 static int __Pyx_ImportFunction(PyObject *module, const char *funcname, void (**f)(void), const char *sig) {
-    PyObject *d = 0;
-    PyObject *cobj = 0;
+    PyObject *d = NULL;
+    PyObject *cobj = NULL;
     union {
         void (*fp)(void);
         void *p;
@@ -642,8 +641,8 @@ static int __Pyx_ExportFunction(const char *name, void (*f)(void), const char *s
 //@substitute: naming
 
 static int __Pyx_ExportFunction(const char *name, void (*f)(void), const char *sig) {
-    PyObject *d = 0;
-    PyObject *cobj = 0;
+    PyObject *d = NULL;
+    PyObject *cobj = NULL;
     union {
         void (*fp)(void);
         void *p;
@@ -660,7 +659,7 @@ static int __Pyx_ExportFunction(const char *name, void (*f)(void), const char *s
             goto bad;
     }
     tmp.fp = f;
-    cobj = PyCapsule_New(tmp.p, sig, 0);
+    cobj = PyCapsule_New(tmp.p, sig, NULL);
     if (!cobj)
         goto bad;
     if (PyDict_SetItemString(d, name, cobj) < 0)
@@ -684,8 +683,8 @@ static int __Pyx_ImportVoidPtr(PyObject *module, const char *name, void **p, con
 #ifndef __PYX_HAVE_RT_ImportVoidPtr
 #define __PYX_HAVE_RT_ImportVoidPtr
 static int __Pyx_ImportVoidPtr(PyObject *module, const char *name, void **p, const char *sig) {
-    PyObject *d = 0;
-    PyObject *cobj = 0;
+    PyObject *d = NULL;
+    PyObject *cobj = NULL;
 
     d = PyObject_GetAttrString(module, (char *)"$api_name");
     if (!d)
@@ -724,7 +723,7 @@ static int __Pyx_ExportVoidPtr(PyObject *name, void *p, const char *sig); /*prot
 
 static int __Pyx_ExportVoidPtr(PyObject *name, void *p, const char *sig) {
     PyObject *d;
-    PyObject *cobj = 0;
+    PyObject *cobj = NULL;
 
     d = PyDict_GetItem($moddict_cname, PYIDENT("$api_name"));
     Py_XINCREF(d);
@@ -735,7 +734,7 @@ static int __Pyx_ExportVoidPtr(PyObject *name, void *p, const char *sig) {
         if (__Pyx_PyObject_SetAttrStr($module_cname, PYIDENT("$api_name"), d) < 0)
             goto bad;
     }
-    cobj = PyCapsule_New(p, sig, 0);
+    cobj = PyCapsule_New(p, sig, NULL);
     if (!cobj)
         goto bad;
     if (PyDict_SetItem(d, name, cobj) < 0)
@@ -757,7 +756,7 @@ static int __Pyx_SetVtable(PyTypeObject* typeptr , void* vtable); /*proto*/
 /////////////// SetVTable ///////////////
 
 static int __Pyx_SetVtable(PyTypeObject *type, void *vtable) {
-    PyObject *ob = PyCapsule_New(vtable, 0, 0);
+    PyObject *ob = PyCapsule_New(vtable, NULL, NULL);
     if (unlikely(!ob))
         goto bad;
 #if CYTHON_COMPILING_IN_LIMITED_API
@@ -789,7 +788,7 @@ static void* __Pyx_GetVtable(PyTypeObject *type) {
 #endif
     if (!ob)
         goto bad;
-    ptr = PyCapsule_GetPointer(ob, 0);
+    ptr = PyCapsule_GetPointer(ob, NULL);
     if (!ptr && !PyErr_Occurred())
         PyErr_SetString(PyExc_RuntimeError, "invalid vtable found for imported type");
     Py_DECREF(ob);

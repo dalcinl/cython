@@ -2215,7 +2215,7 @@ class FuncDefNode(StatNode, BlockNode):
                 code.putln("__Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);")
                 for entry in used_buffer_entries:
                     Buffer.put_release_buffer_code(code, entry)
-                    #code.putln("%s = 0;" % entry.cname)
+                    #code.putln("%s = NULL;" % entry.cname)
                 code.putln("__Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}")
 
             if return_type.is_memoryviewslice:
@@ -2913,7 +2913,7 @@ class CFuncDefNode(FuncDefNode):
 
     def error_value(self):
         if self.return_type.is_pyobject:
-            return "0"
+            return "NULL"
         else:
             return self.entry.type.exception_value
 
@@ -3389,7 +3389,7 @@ class DefNode(FuncDefNode):
             if arg.needs_conversion:
                 arg.entry = env.declare_var(arg.name, arg.type, arg.pos)
                 if arg.type.is_pyobject:
-                    arg.entry.init = "0"
+                    arg.entry.init = "NULL"
             else:
                 arg.entry = self.declare_argument(env, arg)
             arg.entry.is_arg = 1
@@ -3407,7 +3407,7 @@ class DefNode(FuncDefNode):
             entry = env.declare_var(arg.name, type, arg.pos)
             entry.is_arg = 1
             entry.used = 1
-            entry.init = "0"
+            entry.init = "NULL"
             entry.xdecref_cleanup = 1
             arg.entry = entry
 
@@ -3652,7 +3652,7 @@ class DefNodeWrapper(FuncDefNode):
         tempvardecl_code = code.insertion_point()
 
         if self.return_type.is_pyobject:
-            retval_init = ' = 0'
+            retval_init = ' = NULL'
         else:
             retval_init = ''
         if not self.return_type.is_void:
@@ -3795,7 +3795,7 @@ class DefNodeWrapper(FuncDefNode):
         for arg in self.args:
             if arg.is_generic:
                 if arg.needs_conversion:
-                    code.putln("PyObject *%s = 0;" % arg.hdr_cname)
+                    code.putln("PyObject *%s = NULL;" % arg.hdr_cname)
                 else:
                     code.put_var_declaration(arg.entry)
         for entry in env.var_entries:
@@ -4011,7 +4011,7 @@ class DefNodeWrapper(FuncDefNode):
         all_args = tuple(positional_args) + tuple(kw_only_args)
         non_posonly_args = [arg for arg in all_args if not arg.pos_only]
         non_pos_args_id = ','.join(
-            ['&%s' % code.intern_identifier(arg.entry.name) for arg in non_posonly_args] + ['0'])
+            ['&%s' % code.intern_identifier(arg.entry.name) for arg in non_posonly_args] + ['NULL'])
         code.putln("#if CYTHON_USE_MODULE_STATE")
         code.putln("PyObject **%s[] = {%s};" % (
             Naming.pykwdlist_cname,
@@ -4221,7 +4221,7 @@ class DefNodeWrapper(FuncDefNode):
         # the 'values' array collects borrowed references to arguments
         # before doing any type coercion etc.
         code.putln("PyObject* values[%d] = {%s};" % (
-            max_args, ','.join('0'*max_args)))
+            max_args, ','.join(['NULL']*max_args)))
 
         if self.target.defaults_struct:
             code.putln('%s *%s = __Pyx_CyFunction_Defaults(%s, %s);' % (
@@ -4321,7 +4321,7 @@ class DefNodeWrapper(FuncDefNode):
                     code.putln('else if (unlikely(PyErr_Occurred())) %s' % code.error_goto(self.pos))
                     code.putln('}')
                 else:
-                    code.putln('if (likely((values[%d] = __Pyx_GetKwValue_%s(%s, %s, %s)) != 0)) kw_args--;' % (
+                    code.putln('if (likely((values[%d] = __Pyx_GetKwValue_%s(%s, %s, %s)) != NULL)) kw_args--;' % (
                         i, self.signature.fastvar, Naming.kwds_cname, Naming.kwvalues_cname, pystring_cname))
                     code.putln('else if (unlikely(PyErr_Occurred())) %s' % code.error_goto(self.pos))
                     if i < min_positional_args:
@@ -4405,7 +4405,7 @@ class DefNodeWrapper(FuncDefNode):
             Naming.kwds_cname,
             Naming.kwvalues_cname,
             Naming.pykwdlist_cname,
-            self.starstar_arg and self.starstar_arg.entry.cname or '0',
+            self.starstar_arg and self.starstar_arg.entry.cname or 'NULL',
             values_array,
             pos_arg_count,
             self_name_csafe,
@@ -5579,7 +5579,7 @@ class CClassDefNode(ClassDefNode):
             # behavior of using tp_repr or tp_str instead.
             # ("tp_print" was renamed to "tp_vectorcall_offset" in Py3.8b1)
             code.putln("#if PY_MAJOR_VERSION < 3")
-            code.putln("%s->tp_print = 0;" % typeptr_cname)
+            code.putln("%s->tp_print = NULL;" % typeptr_cname)
             code.putln("#endif")
 
             # Use specialised attribute lookup for types with generic lookup but no instance dict.
@@ -6451,7 +6451,7 @@ class PrintStatNode(StatNode):
             self.stream.generate_evaluation_code(code)
             stream_result = self.stream.py_result()
         else:
-            stream_result = '0'
+            stream_result = 'NULL'
         if len(self.arg_tuple.args) == 1 and self.append_newline:
             arg = self.arg_tuple.args[0]
             arg.generate_evaluation_code(code)
@@ -6513,7 +6513,7 @@ class ExecStatNode(StatNode):
         for arg in self.args:
             arg.generate_evaluation_code(code)
             args.append(arg.py_result())
-        args = tuple(args + ['0', '0'][:3-len(args)])
+        args = tuple(args + ['NULL', 'NULL'][:3-len(args)])
         temp_result = code.funcstate.allocate_temp(PyrexTypes.py_object_type, manage_ref=True)
         code.putln("%s = __Pyx_PyExec3(%s, %s, %s);" % ((temp_result,) + args))
         for arg in self.args:
@@ -6834,22 +6834,22 @@ class RaiseStatNode(StatNode):
             if self.exc_type.is_name:
                 code.globalstate.use_entry_utility_code(self.exc_type.entry)
         else:
-            type_code = "0"
+            type_code = "NULL"
         if self.exc_value:
             self.exc_value.generate_evaluation_code(code)
             value_code = self.exc_value.py_result()
         else:
-            value_code = "0"
+            value_code = "NULL"
         if self.exc_tb:
             self.exc_tb.generate_evaluation_code(code)
             tb_code = self.exc_tb.py_result()
         else:
-            tb_code = "0"
+            tb_code = "NULL"
         if self.cause:
             self.cause.generate_evaluation_code(code)
             cause_code = self.cause.py_result()
         else:
-            cause_code = "0"
+            cause_code = "NULL"
         code.globalstate.use_utility_code(raise_utility_code)
         code.putln(
             "__Pyx_Raise(%s, %s, %s, %s);" % (
@@ -6907,7 +6907,7 @@ class ReraiseStatNode(StatNode):
             code.put_xgiveref(vars[2], py_object_type)
             code.putln("__Pyx_ErrRestoreWithState(%s, %s, %s);" % tuple(vars))
             for varname in vars:
-                code.put("%s = 0; " % varname)
+                code.put("%s = NULL; " % varname)
             code.putln()
             code.putln(code.error_goto(self.pos))
         else:
@@ -8135,7 +8135,7 @@ class ExceptClauseNode(Node):
 
             if exc_vars:
                 code.putln("__Pyx_ErrRestore(%s, %s, %s);" % tuple(exc_vars))
-                code.putln(' '.join(["%s = 0;" % var for var in exc_vars]))
+                code.putln(' '.join(["%s = NULL;" % var for var in exc_vars]))
                 for temp in exc_vars:
                     code.funcstate.release_temp(temp)
 
@@ -8152,7 +8152,7 @@ class ExceptClauseNode(Node):
             # most simple case: no exception variable, empty body (pass)
             # => reset the exception state, done
             code.globalstate.use_utility_code(UtilityCode.load_cached("PyErrFetchRestore", "Exceptions.c"))
-            code.putln("__Pyx_ErrRestore(0,0,0);")
+            code.putln("__Pyx_ErrRestore(NULL, NULL, NULL);")
             code.put_goto(end_label)
             code.putln("}")
             return
@@ -8396,7 +8396,7 @@ class TryFinallyStatNode(StatNode):
                             self.func_return_type, manage_ref=False)
                         code.putln("%s = %s;" % (ret_temp, Naming.retval_cname))
                         if self.func_return_type.is_pyobject:
-                            code.putln("%s = 0;" % Naming.retval_cname)
+                            code.putln("%s = NULL;" % Naming.retval_cname)
 
             fresh_finally_clause().generate_execution_code(code)
 
@@ -8404,7 +8404,7 @@ class TryFinallyStatNode(StatNode):
                 if ret_temp:
                     code.putln("%s = %s;" % (Naming.retval_cname, ret_temp))
                     if self.func_return_type.is_pyobject:
-                        code.putln("%s = 0;" % ret_temp)
+                        code.putln("%s = NULL;" % ret_temp)
                     code.funcstate.release_temp(ret_temp)
                 if self.in_generator:
                     self.put_error_uncatcher(code, exc_vars)
@@ -8436,7 +8436,7 @@ class TryFinallyStatNode(StatNode):
             code.put_ensure_gil(declare_gilstate=False)
         code.putln("__Pyx_PyThreadState_assign")
 
-        code.putln(' '.join(["%s = 0;" % var for var in exc_vars]))
+        code.putln(' '.join(["%s = NULL;" % var for var in exc_vars]))
         for temp_name, type in temps_to_clean_up:
             code.put_xdecref_clear(temp_name, type)
 
@@ -8481,7 +8481,7 @@ class TryFinallyStatNode(StatNode):
         if self.is_try_finally_in_nogil:
             code.put_release_ensured_gil()
 
-        code.putln(' '.join(["%s = 0;" % var for var in exc_vars]))
+        code.putln(' '.join(["%s = NULL;" % var for var in exc_vars]))
         if exc_lineno_cnames:
             code.putln("%s = %s; %s = %s; %s = %s;" % (
                 Naming.lineno_cname, exc_lineno_cnames[0],
@@ -8504,7 +8504,7 @@ class TryFinallyStatNode(StatNode):
             code.put_xdecref_clear(var, py_object_type)
         if self.is_try_finally_in_nogil:
             code.put_release_ensured_gil()
-        code.putln(' '.join(["%s = 0;"]*3) % exc_vars[3:])
+        code.putln(' '.join(["%s = NULL;"]*3) % exc_vars[3:])
 
     def annotate(self, code):
         self.body.annotate(code)

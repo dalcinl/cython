@@ -1226,8 +1226,8 @@ class PyObjectType(PyrexType):
 
     name = "object"
     is_pyobject = 1
-    default_value = "0"
-    declaration_value = "0"
+    default_value = "NULL"
+    declaration_value = "NULL"
     buffer_defaults = None
     is_extern = False
     is_subclassed = False
@@ -1347,7 +1347,7 @@ class PyObjectType(PyrexType):
                     X = ''  # CPython doesn't have a Py_XCLEAR()
                 code.putln("%s_%sCLEAR(%s);" % (prefix, X, cname))
             else:
-                code.putln("%s_%sDECREF(%s); %s = 0;" % (
+                code.putln("%s_%sDECREF(%s); %s = NULL;" % (
                     prefix, X, self.as_pyobject(cname), cname))
         else:
             code.putln("%s_%sDECREF(%s);" % (
@@ -2726,7 +2726,7 @@ class CPtrType(CPointerBaseType):
     #  base_type     CType              Reference type
 
     is_ptr = 1
-    default_value = "0"
+    default_value = "NULL"
 
     def __hash__(self):
         return hash(self.base_type) + 27  # arbitrarily chosen offset

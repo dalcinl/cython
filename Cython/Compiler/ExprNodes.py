@@ -876,7 +876,7 @@ class ExprNode(Node):
                 self.generate_subexpr_disposal_code(code)
                 self.free_subexpr_temps(code)
             elif self.type.is_pyobject:
-                code.putln("%s = 0;" % self.result())
+                code.putln("%s = NULL;" % self.result())
             elif self.type.is_memoryviewslice:
                 code.putln("%s.memview = NULL;" % self.result())
                 code.putln("%s.data = NULL;" % self.result())
@@ -2608,7 +2608,7 @@ class NameNode(AtomicExprNode):
                                     pos=self.pos, code=code)
 
         if not pretty_rhs:
-            code.putln("%s = 0;" % rhstmp)
+            code.putln("%s = NULL;" % rhstmp)
             code.funcstate.release_temp(rhstmp)
 
     def generate_deletion_code(self, code, ignore_nonexisting=False):
@@ -2770,7 +2770,7 @@ class ImportNode(ExprNode):
             code.globalstate.use_utility_code(UtilityCode.load_cached("Import", "ImportExport.c"))
             import_code = "__Pyx_Import(%s, %s, %d)" % (
                 self.module_name.py_result(),
-                self.name_list.py_result() if self.name_list else '0',
+                self.name_list.py_result() if self.name_list else 'NULL',
                 self.level)
 
         if self.level <= 0 and module_name in utility_code_for_imports:
@@ -10258,7 +10258,7 @@ class YieldExprNode(ExprNode):
                 save_cname = "__PYX_STD_MOVE_IF_SUPPORTED(%s)" % save_cname
             code.putln('%s = %s;' % (cname, save_cname))
             if type.is_pyobject:
-                code.putln('%s = 0;' % save_cname)
+                code.putln('%s = NULL;' % save_cname)
                 code.put_xgotref(cname, type)
             elif type.is_memoryviewslice:
                 code.putln('%s.memview = NULL; %s.data = NULL;' % (save_cname, save_cname))
@@ -13907,7 +13907,11 @@ class CoerceToBooleanNode(CoercionNode):
         return self.arg.check_const()
 
     def calculate_result_code(self):
-        return "(%s != 0)" % self.arg.result()
+        if self.arg.type.is_ptr:
+            zero_value = "NULL"
+        else:
+            zero_value = "0"
+        return "(%s != %s)" % (self.arg.result(), zero_value)
 
     def generate_result_code(self, code):
         if not self.is_temp:

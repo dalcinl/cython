@@ -1870,16 +1870,16 @@ static int __Pyx_RegisterCleanup(void) {
     // and cached objects that we are about to clean up.
 
     static PyMethodDef cleanup_def = {
-        "__cleanup", (PyCFunction)${cleanup_cname}_atexit, METH_NOARGS, 0};
+        "__cleanup", (PyCFunction)${cleanup_cname}_atexit, METH_NOARGS, NULL};
 
-    PyObject *cleanup_func = 0;
-    PyObject *atexit = 0;
-    PyObject *reg = 0;
-    PyObject *args = 0;
-    PyObject *res = 0;
+    PyObject *cleanup_func = NULL;
+    PyObject *atexit = NULL;
+    PyObject *reg = NULL;
+    PyObject *args = NULL;
+    PyObject *res = NULL;
     int ret = -1;
 
-    cleanup_func = PyCFunction_New(&cleanup_def, 0);
+    cleanup_func = PyCFunction_New(&cleanup_def, NULL);
     if (!cleanup_func)
         goto bad;
 

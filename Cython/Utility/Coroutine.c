@@ -443,8 +443,8 @@ static CYTHON_INLINE void __Pyx_Coroutine_ResetFrameBackpointer(__Pyx_ExcInfoStr
 //////////////////// Coroutine.proto ////////////////////
 
 #define __Pyx_Coroutine_USED
-static PyTypeObject *__pyx_CoroutineType = 0;
-static PyTypeObject *__pyx_CoroutineAwaitType = 0;
+static PyTypeObject *__pyx_CoroutineType = NULL;
+static PyTypeObject *__pyx_CoroutineAwaitType = NULL;
 #define __Pyx_Coroutine_CheckExact(obj) __Pyx_IS_TYPE(obj, __pyx_CoroutineType)
 // __Pyx_Coroutine_Check(obj): see override for IterableCoroutine below
 #define __Pyx_Coroutine_Check(obj) __Pyx_Coroutine_CheckExact(obj)
@@ -468,7 +468,7 @@ static PyObject *__Pyx_CoroutineAwait_Throw(__pyx_CoroutineAwaitObject *self, Py
 //////////////////// Generator.proto ////////////////////
 
 #define __Pyx_Generator_USED
-static PyTypeObject *__pyx_GeneratorType = 0;
+static PyTypeObject *__pyx_GeneratorType = NULL;
 #define __Pyx_Generator_CheckExact(obj) __Pyx_IS_TYPE(obj, __pyx_GeneratorType)
 
 #define __Pyx_Generator_New(body, code, closure, name, qualname, module_name)  \
@@ -1572,10 +1572,10 @@ static PyMethodDef __pyx_CoroutineAwait_methods[] = {
      (char*) PyDoc_STR("close() -> raise GeneratorExit inside coroutine.")},
 // only needed with type-specs or version<3.6, but included in all versions for clarity
 // #if PY_VERSION_HEX < 0x03060000 || CYTHON_USE_TYPE_SPECS
-    {"__reduce_ex__", (PyCFunction) __Pyx_CoroutineAwait_reduce_ex, METH_O, 0},
-    {"__reduce__", (PyCFunction) __Pyx_CoroutineAwait_reduce_ex, METH_NOARGS, 0},
+    {"__reduce_ex__", (PyCFunction) __Pyx_CoroutineAwait_reduce_ex, METH_O, NULL},
+    {"__reduce__", (PyCFunction) __Pyx_CoroutineAwait_reduce_ex, METH_NOARGS, NULL},
 // #endif
-    {0, 0, 0, 0}
+    {NULL, NULL, 0, NULL}
 };
 
 #if CYTHON_USE_TYPE_SPECS
@@ -1602,59 +1602,59 @@ static PyType_Spec __pyx_CoroutineAwaitType_spec = {
 #else /* CYTHON_USE_TYPE_SPECS */
 
 static PyTypeObject __pyx_CoroutineAwaitType_type = {
-    PyVarObject_HEAD_INIT(0, 0)
+    PyVarObject_HEAD_INIT(NULL, 0)
     __PYX_TYPE_MODULE_PREFIX "coroutine_wrapper", /*tp_name*/
     sizeof(__pyx_CoroutineAwaitObject), /*tp_basicsize*/
     0,                                  /*tp_itemsize*/
     (destructor) __Pyx_CoroutineAwait_dealloc,/*tp_dealloc*/
-    0,                                  /*tp_print*/
-    0,                                  /*tp_getattr*/
-    0,                                  /*tp_setattr*/
-    0,                                  /*tp_as_async resp. tp_compare*/
-    0,                                  /*tp_repr*/
-    0,                                  /*tp_as_number*/
-    0,                                  /*tp_as_sequence*/
-    0,                                  /*tp_as_mapping*/
-    0,                                  /*tp_hash*/
-    0,                                  /*tp_call*/
-    0,                                  /*tp_str*/
-    0,                                  /*tp_getattro*/
-    0,                                  /*tp_setattro*/
-    0,                                  /*tp_as_buffer*/
+    NULL,                               /*tp_print*/
+    NULL,                               /*tp_getattr*/
+    NULL,                               /*tp_setattr*/
+    NULL,                               /*tp_as_async resp. tp_compare*/
+    NULL,                               /*tp_repr*/
+    NULL,                               /*tp_as_number*/
+    NULL,                               /*tp_as_sequence*/
+    NULL,                               /*tp_as_mapping*/
+    NULL,                               /*tp_hash*/
+    NULL,                               /*tp_call*/
+    NULL,                               /*tp_str*/
+    NULL,                               /*tp_getattro*/
+    NULL,                               /*tp_setattro*/
+    NULL,                               /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC, /*tp_flags*/
     PyDoc_STR("A wrapper object implementing __await__ for coroutines."), /*tp_doc*/
     (traverseproc) __Pyx_CoroutineAwait_traverse,   /*tp_traverse*/
     (inquiry) __Pyx_CoroutineAwait_clear,           /*tp_clear*/
-    0,                                  /*tp_richcompare*/
+    NULL,                               /*tp_richcompare*/
     0,                                  /*tp_weaklistoffset*/
     __Pyx_CoroutineAwait_self,          /*tp_iter*/
     (iternextfunc) __Pyx_CoroutineAwait_Next, /*tp_iternext*/
     __pyx_CoroutineAwait_methods,       /*tp_methods*/
-    0                         ,         /*tp_members*/
-    0                      ,            /*tp_getset*/
-    0,                                  /*tp_base*/
-    0,                                  /*tp_dict*/
-    0,                                  /*tp_descr_get*/
-    0,                                  /*tp_descr_set*/
+    NULL,                               /*tp_members*/
+    NULL,                               /*tp_getset*/
+    NULL,                               /*tp_base*/
+    NULL,                               /*tp_dict*/
+    NULL,                               /*tp_descr_get*/
+    NULL,                               /*tp_descr_set*/
     0,                                  /*tp_dictoffset*/
-    0,                                  /*tp_init*/
-    0,                                  /*tp_alloc*/
+    NULL,                               /*tp_init*/
+    NULL,                               /*tp_alloc*/
 #if !CYTHON_COMPILING_IN_PYPY
     __Pyx_CoroutineAwait_no_new,        /*tp_new*/
 #else
-    0,                                  /*tp_new*/
+    NULL,                               /*tp_new*/
 #endif
-    0,                                  /*tp_free*/
-    0,                                  /*tp_is_gc*/
-    0,                                  /*tp_bases*/
-    0,                                  /*tp_mro*/
-    0,                                  /*tp_cache*/
-    0,                                  /*tp_subclasses*/
-    0,                                  /*tp_weaklist*/
-    0,                                  /*tp_del*/
+    NULL,                               /*tp_free*/
+    NULL,                               /*tp_is_gc*/
+    NULL,                               /*tp_bases*/
+    NULL,                               /*tp_mro*/
+    NULL,                               /*tp_cache*/
+    NULL,                               /*tp_subclasses*/
+    NULL,                               /*tp_weaklist*/
+    NULL,                               /*tp_del*/
     0,                                  /*tp_version_tag*/
 #if PY_VERSION_HEX >= 0x030400a1
-    0,                                  /*tp_finalize*/
+    NULL,                               /*tp_finalize*/
 #endif
 #if PY_VERSION_HEX >= 0x030800b1 && (!CYTHON_COMPILING_IN_PYPY || PYPY_VERSION_NUM >= 0x07030800)
     0,                                  /*tp_vectorcall*/
@@ -1721,7 +1721,7 @@ static PyMethodDef __pyx_Coroutine_methods[] = {
     {"__await__", (PyCFunction) __Pyx_Coroutine_await_method, METH_NOARGS,
      (char*) PyDoc_STR("__await__() -> return an iterator to be used in await expression.")},
 #endif
-    {0, 0, 0, 0}
+    {NULL, NULL, 0, NULL}
 };
 
 static PyMemberDef __pyx_Coroutine_memberlist[] = {
@@ -1729,21 +1729,21 @@ static PyMemberDef __pyx_Coroutine_memberlist[] = {
     {(char*) "cr_await", T_OBJECT, offsetof(__pyx_CoroutineObject, yieldfrom), READONLY,
      (char*) PyDoc_STR("object being awaited, or None")},
     {(char*) "cr_code", T_OBJECT, offsetof(__pyx_CoroutineObject, gi_code), READONLY, NULL},
-    {(char *) "__module__", T_OBJECT, offsetof(__pyx_CoroutineObject, gi_modulename), 0, 0},
+    {(char *) "__module__", T_OBJECT, offsetof(__pyx_CoroutineObject, gi_modulename), 0, NULL},
 #if CYTHON_USE_TYPE_SPECS
-    {(char *) "__weaklistoffset__", T_PYSSIZET, offsetof(__pyx_CoroutineObject, gi_weakreflist), READONLY, 0},
+    {(char *) "__weaklistoffset__", T_PYSSIZET, offsetof(__pyx_CoroutineObject, gi_weakreflist), READONLY, NULL},
 #endif
-    {0, 0, 0, 0, 0}
+    {NULL, 0, 0, 0, NULL}
 };
 
 static PyGetSetDef __pyx_Coroutine_getsets[] = {
     {(char *) "__name__", (getter)__Pyx_Coroutine_get_name, (setter)__Pyx_Coroutine_set_name,
-     (char*) PyDoc_STR("name of the coroutine"), 0},
+     (char*) PyDoc_STR("name of the coroutine"), NULL},
     {(char *) "__qualname__", (getter)__Pyx_Coroutine_get_qualname, (setter)__Pyx_Coroutine_set_qualname,
-     (char*) PyDoc_STR("qualified name of the coroutine"), 0},
+     (char*) PyDoc_STR("qualified name of the coroutine"), NULL},
     {(char *) "cr_frame", (getter)__Pyx_Coroutine_get_frame, NULL,
-     (char*) PyDoc_STR("Frame of the coroutine"), 0},
-    {0, 0, 0, 0, 0}
+     (char*) PyDoc_STR("Frame of the coroutine"), NULL},
+    {NULL, NULL, NULL, NULL, NULL}
 };
 
 #if CYTHON_USE_TYPE_SPECS
@@ -1773,72 +1773,72 @@ static PyType_Spec __pyx_CoroutineType_spec = {
 #if CYTHON_USE_ASYNC_SLOTS
 static __Pyx_PyAsyncMethodsStruct __pyx_Coroutine_as_async = {
     __Pyx_Coroutine_await, /*am_await*/
-    0, /*am_aiter*/
-    0, /*am_anext*/
+    NULL, /*am_aiter*/
+    NULL, /*am_anext*/
 #if PY_VERSION_HEX >= 0x030A00A3
-    0, /*am_send*/
+    NULL, /*am_send*/
 #endif
 };
 #endif
 
 static PyTypeObject __pyx_CoroutineType_type = {
-    PyVarObject_HEAD_INIT(0, 0)
+    PyVarObject_HEAD_INIT(NULL, 0)
     __PYX_TYPE_MODULE_PREFIX "coroutine", /*tp_name*/
     sizeof(__pyx_CoroutineObject),      /*tp_basicsize*/
     0,                                  /*tp_itemsize*/
     (destructor) __Pyx_Coroutine_dealloc,/*tp_dealloc*/
-    0,                                  /*tp_print*/
-    0,                                  /*tp_getattr*/
-    0,                                  /*tp_setattr*/
+    NULL,                               /*tp_print*/
+    NULL,                               /*tp_getattr*/
+    NULL,                               /*tp_setattr*/
 #if CYTHON_USE_ASYNC_SLOTS
     &__pyx_Coroutine_as_async,          /*tp_as_async (tp_reserved) - Py3 only! */
 #else
-    0,                                  /*tp_reserved*/
+    NULL,                               /*tp_reserved*/
 #endif
-    0,                                  /*tp_repr*/
-    0,                                  /*tp_as_number*/
-    0,                                  /*tp_as_sequence*/
-    0,                                  /*tp_as_mapping*/
-    0,                                  /*tp_hash*/
-    0,                                  /*tp_call*/
-    0,                                  /*tp_str*/
-    0,                                  /*tp_getattro*/
-    0,                                  /*tp_setattro*/
-    0,                                  /*tp_as_buffer*/
+    NULL,                               /*tp_repr*/
+    NULL,                               /*tp_as_number*/
+    NULL,                               /*tp_as_sequence*/
+    NULL,                               /*tp_as_mapping*/
+    NULL,                               /*tp_hash*/
+    NULL,                               /*tp_call*/
+    NULL,                               /*tp_str*/
+    NULL,                               /*tp_getattro*/
+    NULL,                               /*tp_setattro*/
+    NULL,                               /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC | Py_TPFLAGS_HAVE_FINALIZE, /*tp_flags*/
-    0,                                  /*tp_doc*/
+    NULL,                               /*tp_doc*/
     (traverseproc) __Pyx_Coroutine_traverse,   /*tp_traverse*/
-    0,                                  /*tp_clear*/
+    NULL,                               /*tp_clear*/
 #if CYTHON_USE_ASYNC_SLOTS && CYTHON_COMPILING_IN_CPYTHON && PY_MAJOR_VERSION >= 3 && PY_VERSION_HEX < 0x030500B1
     // in order to (mis-)use tp_reserved above, we must also implement tp_richcompare
     __Pyx_Coroutine_compare,            /*tp_richcompare*/
 #else
-    0,                                  /*tp_richcompare*/
+    NULL,                               /*tp_richcompare*/
 #endif
     offsetof(__pyx_CoroutineObject, gi_weakreflist), /*tp_weaklistoffset*/
     // no tp_iter() as iterator is only available through __await__()
-    0,                                  /*tp_iter*/
-    0,                                  /*tp_iternext*/
+    NULL,                               /*tp_iter*/
+    NULL,                               /*tp_iternext*/
     __pyx_Coroutine_methods,            /*tp_methods*/
     __pyx_Coroutine_memberlist,         /*tp_members*/
     __pyx_Coroutine_getsets,            /*tp_getset*/
-    0,                                  /*tp_base*/
-    0,                                  /*tp_dict*/
-    0,                                  /*tp_descr_get*/
-    0,                                  /*tp_descr_set*/
+    NULL,                               /*tp_base*/
+    NULL,                               /*tp_dict*/
+    NULL,                               /*tp_descr_get*/
+    NULL,                               /*tp_descr_set*/
     0,                                  /*tp_dictoffset*/
-    0,                                  /*tp_init*/
-    0,                                  /*tp_alloc*/
-    0,                                  /*tp_new*/
-    0,                                  /*tp_free*/
-    0,                                  /*tp_is_gc*/
-    0,                                  /*tp_bases*/
-    0,                                  /*tp_mro*/
-    0,                                  /*tp_cache*/
-    0,                                  /*tp_subclasses*/
-    0,                                  /*tp_weaklist*/
+    NULL,                               /*tp_init*/
+    NULL,                               /*tp_alloc*/
+    NULL,                               /*tp_new*/
+    NULL,                               /*tp_free*/
+    NULL,                               /*tp_is_gc*/
+    NULL,                               /*tp_bases*/
+    NULL,                               /*tp_mro*/
+    NULL,                               /*tp_cache*/
+    NULL,                               /*tp_subclasses*/
+    NULL,                               /*tp_weaklist*/
 #if CYTHON_USE_TP_FINALIZE
-    0,                                  /*tp_del*/
+    NULL,                               /*tp_del*/
 #else
     __Pyx_Coroutine_del,                /*tp_del*/
 #endif
@@ -1846,7 +1846,7 @@ static PyTypeObject __pyx_CoroutineType_type = {
 #if CYTHON_USE_TP_FINALIZE
     __Pyx_Coroutine_del,                /*tp_finalize*/
 #elif PY_VERSION_HEX >= 0x030400a1
-    0,                                  /*tp_finalize*/
+    NULL,                               /*tp_finalize*/
 #endif
 #if PY_VERSION_HEX >= 0x030800b1 && (!CYTHON_COMPILING_IN_PYPY || PYPY_VERSION_NUM >= 0x07030800)
     0,                                  /*tp_vectorcall*/
@@ -1934,38 +1934,38 @@ static PyType_Spec __pyx_IterableCoroutineType_spec = {
 #else /* CYTHON_USE_TYPE_SPECS */
 
 static PyTypeObject __pyx_IterableCoroutineType_type = {
-    PyVarObject_HEAD_INIT(0, 0)
+    PyVarObject_HEAD_INIT(NULL, 0)
     __PYX_TYPE_MODULE_PREFIX "iterable_coroutine", /*tp_name*/
     sizeof(__pyx_CoroutineObject),      /*tp_basicsize*/
     0,                                  /*tp_itemsize*/
     (destructor) __Pyx_Coroutine_dealloc,/*tp_dealloc*/
-    0,                                  /*tp_print*/
-    0,                                  /*tp_getattr*/
-    0,                                  /*tp_setattr*/
+    NULL,                               /*tp_print*/
+    NULL,                               /*tp_getattr*/
+    NULL,                               /*tp_setattr*/
 #if CYTHON_USE_ASYNC_SLOTS
     &__pyx_Coroutine_as_async,          /*tp_as_async (tp_reserved) - Py3 only! */
 #else
-    0,                                  /*tp_reserved*/
+    NULL,                               /*tp_reserved*/
 #endif
-    0,                                  /*tp_repr*/
-    0,                                  /*tp_as_number*/
-    0,                                  /*tp_as_sequence*/
-    0,                                  /*tp_as_mapping*/
-    0,                                  /*tp_hash*/
-    0,                                  /*tp_call*/
-    0,                                  /*tp_str*/
-    0,                                  /*tp_getattro*/
-    0,                                  /*tp_setattro*/
-    0,                                  /*tp_as_buffer*/
+    NULL,                               /*tp_repr*/
+    NULL,                               /*tp_as_number*/
+    NULL,                               /*tp_as_sequence*/
+    NULL,                               /*tp_as_mapping*/
+    NULL,                               /*tp_hash*/
+    NULL,                               /*tp_call*/
+    NULL,                               /*tp_str*/
+    NULL,                               /*tp_getattro*/
+    NULL,                               /*tp_setattro*/
+    NULL,                               /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC | Py_TPFLAGS_HAVE_FINALIZE, /*tp_flags*/
-    0,                                  /*tp_doc*/
+    NULL,                               /*tp_doc*/
     (traverseproc) __Pyx_Coroutine_traverse,   /*tp_traverse*/
-    0,                                  /*tp_clear*/
+    NULL,                               /*tp_clear*/
 #if CYTHON_USE_ASYNC_SLOTS && CYTHON_COMPILING_IN_CPYTHON && PY_MAJOR_VERSION >= 3 && PY_VERSION_HEX < 0x030500B1
     // in order to (mis-)use tp_reserved above, we must also implement tp_richcompare
     __Pyx_Coroutine_compare,            /*tp_richcompare*/
 #else
-    0,                                  /*tp_richcompare*/
+    NULL,                               /*tp_richcompare*/
 #endif
     offsetof(__pyx_CoroutineObject, gi_weakreflist), /*tp_weaklistoffset*/
     // enable iteration for legacy support of asyncio yield-from protocol
@@ -1974,23 +1974,23 @@ static PyTypeObject __pyx_IterableCoroutineType_type = {
     __pyx_Coroutine_methods,            /*tp_methods*/
     __pyx_Coroutine_memberlist,         /*tp_members*/
     __pyx_Coroutine_getsets,            /*tp_getset*/
-    0,                                  /*tp_base*/
-    0,                                  /*tp_dict*/
-    0,                                  /*tp_descr_get*/
-    0,                                  /*tp_descr_set*/
+    NULL,                               /*tp_base*/
+    NULL,                               /*tp_dict*/
+    NULL,                               /*tp_descr_get*/
+    NULL,                               /*tp_descr_set*/
     0,                                  /*tp_dictoffset*/
-    0,                                  /*tp_init*/
-    0,                                  /*tp_alloc*/
-    0,                                  /*tp_new*/
-    0,                                  /*tp_free*/
-    0,                                  /*tp_is_gc*/
-    0,                                  /*tp_bases*/
-    0,                                  /*tp_mro*/
-    0,                                  /*tp_cache*/
-    0,                                  /*tp_subclasses*/
-    0,                                  /*tp_weaklist*/
+    NULL,                               /*tp_init*/
+    NULL,                               /*tp_alloc*/
+    NULL,                               /*tp_new*/
+    NULL,                               /*tp_free*/
+    NULL,                               /*tp_is_gc*/
+    NULL,                               /*tp_bases*/
+    NULL,                               /*tp_mro*/
+    NULL,                               /*tp_cache*/
+    NULL,                               /*tp_subclasses*/
+    NULL,                               /*tp_weaklist*/
 #if PY_VERSION_HEX >= 0x030400a1
-    0,                                  /*tp_del*/
+    NULL,                               /*tp_del*/
 #else
     __Pyx_Coroutine_del,                /*tp_del*/
 #endif
@@ -2088,53 +2088,53 @@ static PyType_Spec __pyx_GeneratorType_spec = {
 #else /* CYTHON_USE_TYPE_SPECS */
 
 static PyTypeObject __pyx_GeneratorType_type = {
-    PyVarObject_HEAD_INIT(0, 0)
+    PyVarObject_HEAD_INIT(NULL, 0)
     __PYX_TYPE_MODULE_PREFIX "generator", /*tp_name*/
     sizeof(__pyx_CoroutineObject),      /*tp_basicsize*/
     0,                                  /*tp_itemsize*/
     (destructor) __Pyx_Coroutine_dealloc,/*tp_dealloc*/
-    0,                                  /*tp_print*/
-    0,                                  /*tp_getattr*/
-    0,                                  /*tp_setattr*/
-    0,                                  /*tp_as_async*/
-    0,                                  /*tp_repr*/
-    0,                                  /*tp_as_number*/
-    0,                                  /*tp_as_sequence*/
-    0,                                  /*tp_as_mapping*/
-    0,                                  /*tp_hash*/
-    0,                                  /*tp_call*/
-    0,                                  /*tp_str*/
-    0,                                  /*tp_getattro*/
-    0,                                  /*tp_setattro*/
-    0,                                  /*tp_as_buffer*/
+    0,                                     /*tp_vectorcall_offset*/
+    NULL,                                  /*tp_getattr*/
+    NULL,                                  /*tp_setattr*/
+    NULL,                                  /*tp_as_async*/
+    NULL,                                  /*tp_repr*/
+    NULL,                                  /*tp_as_number*/
+    NULL,                                  /*tp_as_sequence*/
+    NULL,                                  /*tp_as_mapping*/
+    NULL,                                  /*tp_hash*/
+    NULL,                                  /*tp_call*/
+    NULL,                                  /*tp_str*/
+    NULL,                                  /*tp_getattro*/
+    NULL,                                  /*tp_setattro*/
+    NULL,                                  /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_GC | Py_TPFLAGS_HAVE_FINALIZE, /*tp_flags*/
-    0,                                  /*tp_doc*/
+    NULL,                               /*tp_doc*/
     (traverseproc) __Pyx_Coroutine_traverse,   /*tp_traverse*/
-    0,                                  /*tp_clear*/
-    0,                                  /*tp_richcompare*/
+    NULL,                               /*tp_clear*/
+    NULL,                               /*tp_richcompare*/
     offsetof(__pyx_CoroutineObject, gi_weakreflist), /*tp_weaklistoffset*/
-    0,                                  /*tp_iter*/
+    NULL,                               /*tp_iter*/
     (iternextfunc) __Pyx_Generator_Next, /*tp_iternext*/
     __pyx_Generator_methods,            /*tp_methods*/
     __pyx_Generator_memberlist,         /*tp_members*/
     __pyx_Generator_getsets,            /*tp_getset*/
-    0,                                  /*tp_base*/
-    0,                                  /*tp_dict*/
-    0,                                  /*tp_descr_get*/
-    0,                                  /*tp_descr_set*/
+    NULL,                               /*tp_base*/
+    NULL,                               /*tp_dict*/
+    NULL,                               /*tp_descr_get*/
+    NULL,                               /*tp_descr_set*/
     0,                                  /*tp_dictoffset*/
-    0,                                  /*tp_init*/
-    0,                                  /*tp_alloc*/
-    0,                                  /*tp_new*/
-    0,                                  /*tp_free*/
-    0,                                  /*tp_is_gc*/
-    0,                                  /*tp_bases*/
-    0,                                  /*tp_mro*/
-    0,                                  /*tp_cache*/
-    0,                                  /*tp_subclasses*/
-    0,                                  /*tp_weaklist*/
+    NULL,                               /*tp_init*/
+    NULL,                               /*tp_alloc*/
+    NULL,                               /*tp_new*/
+    NULL,                               /*tp_free*/
+    NULL,                               /*tp_is_gc*/
+    NULL,                               /*tp_bases*/
+    NULL,                               /*tp_mro*/
+    NULL,                               /*tp_cache*/
+    NULL,                               /*tp_subclasses*/
+    NULL,                               /*tp_weaklist*/
 #if CYTHON_USE_TP_FINALIZE
-    0,                                  /*tp_del*/
+    NULL,                               /*tp_del*/
 #else
     __Pyx_Coroutine_del,                /*tp_del*/
 #endif
@@ -2142,7 +2142,7 @@ static PyTypeObject __pyx_GeneratorType_type = {
 #if CYTHON_USE_TP_FINALIZE
     __Pyx_Coroutine_del,                /*tp_finalize*/
 #elif PY_VERSION_HEX >= 0x030400a1
-    0,                                  /*tp_finalize*/
+    NULL,                               /*tp_finalize*/
 #endif
 #if PY_VERSION_HEX >= 0x030800b1 && (!CYTHON_COMPILING_IN_PYPY || PYPY_VERSION_NUM >= 0x07030800)
     0,                                  /*tp_vectorcall*/
@@ -2508,55 +2508,55 @@ static int __pyx_StopAsyncIteration_init(PyObject *module); /*proto*/
 #else
 
 static PyTypeObject __Pyx__PyExc_StopAsyncIteration_type = {
-    PyVarObject_HEAD_INIT(0, 0)
+    PyVarObject_HEAD_INIT(NULL, 0)
     "StopAsyncIteration",               /*tp_name*/
     sizeof(PyBaseExceptionObject),      /*tp_basicsize*/
     0,                                  /*tp_itemsize*/
-    0,                                  /*tp_dealloc*/
-    0,                                  /*tp_print*/
-    0,                                  /*tp_getattr*/
-    0,                                  /*tp_setattr*/
-    0,                                  /*tp_compare / reserved*/
-    0,                                  /*tp_repr*/
-    0,                                  /*tp_as_number*/
-    0,                                  /*tp_as_sequence*/
-    0,                                  /*tp_as_mapping*/
-    0,                                  /*tp_hash*/
-    0,                                  /*tp_call*/
-    0,                                  /*tp_str*/
-    0,                                  /*tp_getattro*/
-    0,                                  /*tp_setattro*/
-    0,                                  /*tp_as_buffer*/
+    NULL,                               /*tp_dealloc*/
+    NULL,                               /*tp_print*/
+    NULL,                               /*tp_getattr*/
+    NULL,                               /*tp_setattr*/
+    NULL,                               /*tp_compare / reserved*/
+    NULL,                               /*tp_repr*/
+    NULL,                               /*tp_as_number*/
+    NULL,                               /*tp_as_sequence*/
+    NULL,                               /*tp_as_mapping*/
+    NULL,                               /*tp_hash*/
+    NULL,                               /*tp_call*/
+    NULL,                               /*tp_str*/
+    NULL,                               /*tp_getattro*/
+    NULL,                               /*tp_setattro*/
+    NULL,                               /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_HAVE_GC,  /*tp_flags*/
     PyDoc_STR("Signal the end from iterator.__anext__()."),  /*tp_doc*/
-    0,                                  /*tp_traverse*/
-    0,                                  /*tp_clear*/
-    0,                                  /*tp_richcompare*/
+    NULL,                               /*tp_traverse*/
+    NULL,                               /*tp_clear*/
+    NULL,                               /*tp_richcompare*/
     0,                                  /*tp_weaklistoffset*/
-    0,                                  /*tp_iter*/
-    0,                                  /*tp_iternext*/
-    0,                                  /*tp_methods*/
-    0,                                  /*tp_members*/
-    0,                                  /*tp_getset*/
-    0,                                  /*tp_base*/
-    0,                                  /*tp_dict*/
-    0,                                  /*tp_descr_get*/
-    0,                                  /*tp_descr_set*/
+    NULL,                               /*tp_iter*/
+    NULL,                               /*tp_iternext*/
+    NULL,                               /*tp_methods*/
+    NULL,                               /*tp_members*/
+    NULL,                               /*tp_getset*/
+    NULL,                               /*tp_base*/
+    NULL,                               /*tp_dict*/
+    NULL,                               /*tp_descr_get*/
+    NULL,                               /*tp_descr_set*/
     0,                                  /*tp_dictoffset*/
-    0,                                  /*tp_init*/
-    0,                                  /*tp_alloc*/
-    0,                                  /*tp_new*/
-    0,                                  /*tp_free*/
-    0,                                  /*tp_is_gc*/
-    0,                                  /*tp_bases*/
-    0,                                  /*tp_mro*/
-    0,                                  /*tp_cache*/
-    0,                                  /*tp_subclasses*/
-    0,                                  /*tp_weaklist*/
-    0,                                  /*tp_del*/
+    NULL,                               /*tp_init*/
+    NULL,                               /*tp_alloc*/
+    NULL,                               /*tp_new*/
+    NULL,                               /*tp_free*/
+    NULL,                               /*tp_is_gc*/
+    NULL,                               /*tp_bases*/
+    NULL,                               /*tp_mro*/
+    NULL,                               /*tp_cache*/
+    NULL,                               /*tp_subclasses*/
+    NULL,                               /*tp_weaklist*/
+    NULL,                               /*tp_del*/
     0,                                  /*tp_version_tag*/
 #if PY_VERSION_HEX >= 0x030400a1
-    0,                                  /*tp_finalize*/
+    NULL,                               /*tp_finalize*/
 #endif
 #if CYTHON_COMPILING_IN_PYPY && PYPY_VERSION_NUM+0 >= 0x06000000
     0,                                          /*tp_pypy_flags*/

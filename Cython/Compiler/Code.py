@@ -1528,7 +1528,7 @@ class GlobalState(object):
         for (type_cname, method_name), cname in sorted(self.cached_cmethods.items()):
             cnames.append(cname)
             method_name_cname = self.get_interned_identifier(StringEncoding.EncodedString(method_name)).cname
-            decl.putln('static __Pyx_CachedCFunction %s = {0, 0, 0, 0, 0};' % (
+            decl.putln('static __Pyx_CachedCFunction %s = {NULL, NULL, NULL, NULL, 0};' % (
                 cname))
             # split type reference storage as it might not be static
             init.putln('%s.type = (PyObject*)&%s;' % (
@@ -1596,7 +1596,7 @@ class GlobalState(object):
                 if not py_string.is_str or not py_string.encoding or \
                         py_string.encoding in ('ASCII', 'USASCII', 'US-ASCII',
                                                'UTF8', 'UTF-8'):
-                    encoding = '0'
+                    encoding = 'NULL'
                 else:
                     encoding = '"%s"' % py_string.encoding.lower()
 
@@ -1617,7 +1617,7 @@ class GlobalState(object):
                         py_string.cname,
                         py_string.py3str_cstring.cname,
                         py_string.py3str_cstring.cname,
-                        '0', 1, 0,
+                        "NULL", 1, 0,
                         py_string.intern
                         ))
                     w_not_in_module_state.putln("#else")
@@ -1645,7 +1645,7 @@ class GlobalState(object):
                     idx,
                     py_string.cname,
                     init_constants.error_goto(self.module_pos)))
-            w.putln("{0, 0, 0, 0, 0, 0, 0}")
+            w.putln("{NULL, NULL, 0, NULL, 0, 0, 0}")
             w.putln("};")
 
             init_constants.putln("#if !CYTHON_USE_MODULE_STATE")
@@ -2330,7 +2330,7 @@ class CCodeWriter(object):
                 entry_name,
                 func_ptr,
                 "|".join(method_flags),
-                entry.doc_cname if entry.doc else '0',
+                entry.doc_cname if entry.doc else 'NULL',
                 term))
         if is_reverse_number_slot and preproc_guard:
             self.putln("#endif")

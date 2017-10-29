@@ -397,7 +397,7 @@ def put_assign_to_buffer(lhs_cname, rhs_cname, buf_entry,
         code.putln('} else {')
         code.putln('PyErr_Restore(%s, %s, %s);' % exc_temps)
         code.putln('}')
-        code.putln('%s = %s = %s = 0;' % exc_temps)
+        code.putln('%s = %s = %s = NULL;' % exc_temps)
         for t in exc_temps:
             code.funcstate.release_temp(t)
         code.putln('}')

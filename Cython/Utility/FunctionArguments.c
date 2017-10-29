@@ -142,11 +142,11 @@ static int __Pyx_CheckKeywordStrings(
     const char* function_name,
     int kw_allowed)
 {
-    PyObject* key = 0;
+    PyObject* key = NULL;
     Py_ssize_t pos = 0;
 #if CYTHON_COMPILING_IN_PYPY
     /* PyPy appears to check keywords at call time, not at unpacking time => not much to do here */
-    if (!kw_allowed && PyDict_Next(kw, &pos, &key, 0))
+    if (!kw_allowed && PyDict_Next(kw, &pos, &key, NULL))
         goto invalid_keyword;
     return 1;
 #else
@@ -169,7 +169,7 @@ static int __Pyx_CheckKeywordStrings(
         return 1;
     }
 
-    while (PyDict_Next(kw, &pos, &key, 0)) {
+    while (PyDict_Next(kw, &pos, &key, NULL)) {
         #if PY_MAJOR_VERSION < 3
         if (unlikely(!PyString_Check(key)))
         #endif
@@ -234,7 +234,7 @@ static int __Pyx_ParseOptionalKeywords(
     Py_ssize_t num_pos_args,
     const char* function_name)
 {
-    PyObject *key = 0, *value = 0;
+    PyObject *key = NULL, *value = NULL;
     Py_ssize_t pos = 0;
     PyObject*** name;
     PyObject*** first_kw_arg = argnames + num_pos_args;

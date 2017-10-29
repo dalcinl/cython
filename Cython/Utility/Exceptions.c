@@ -125,9 +125,9 @@ static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject 
     *type = tstate->curexc_type;
     *value = tstate->curexc_value;
     *tb = tstate->curexc_traceback;
-    tstate->curexc_type = 0;
-    tstate->curexc_value = 0;
-    tstate->curexc_traceback = 0;
+    tstate->curexc_type = NULL;
+    tstate->curexc_value = NULL;
+    tstate->curexc_traceback = NULL;
 }
 #endif
 
@@ -209,14 +209,14 @@ raise_error:
 static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject *cause) {
     PyObject* owned_instance = NULL;
     if (tb == Py_None) {
-        tb = 0;
+        tb = NULL;
     } else if (tb && !PyTraceBack_Check(tb)) {
         PyErr_SetString(PyExc_TypeError,
             "raise: arg 3 must be a traceback or None");
         goto bad;
     }
     if (value == Py_None)
-        value = 0;
+        value = NULL;
 
     if (PyExceptionInstance_Check(type)) {
         if (value) {
@@ -374,9 +374,9 @@ static int __Pyx_GetException(PyObject **type, PyObject **value, PyObject **tb)
     local_type = tstate->curexc_type;
     local_value = tstate->curexc_value;
     local_tb = tstate->curexc_traceback;
-    tstate->curexc_type = 0;
-    tstate->curexc_value = 0;
-    tstate->curexc_traceback = 0;
+    tstate->curexc_type = NULL;
+    tstate->curexc_value = NULL;
+    tstate->curexc_traceback = NULL;
 #else
     PyErr_Fetch(&local_type, &local_value, &local_tb);
 #endif
@@ -439,9 +439,9 @@ static int __Pyx_GetException(PyObject **type, PyObject **value, PyObject **tb)
 #endif
     return 0;
 bad:
-    *type = 0;
-    *value = 0;
-    *tb = 0;
+    *type = NULL;
+    *value = NULL;
+    *tb = NULL;
     Py_XDECREF(local_type);
     Py_XDECREF(local_value);
     Py_XDECREF(local_tb);
@@ -867,8 +867,8 @@ bad:
 
 static void __Pyx_AddTraceback(const char *funcname, int c_line,
                                int py_line, const char *filename) {
-    PyCodeObject *py_code = 0;
-    PyFrameObject *py_frame = 0;
+    PyCodeObject *py_code = NULL;
+    PyFrameObject *py_frame = NULL;
     PyThreadState *tstate = __Pyx_PyThreadState_Current;
     PyObject *ptype, *pvalue, *ptraceback;
 
@@ -897,7 +897,7 @@ static void __Pyx_AddTraceback(const char *funcname, int c_line,
         tstate,            /*PyThreadState *tstate,*/
         py_code,           /*PyCodeObject *code,*/
         $moddict_cname,    /*PyObject *globals,*/
-        0                  /*PyObject *locals*/
+        NULL               /*PyObject *locals*/
     );
     if (!py_frame) goto bad;
     __Pyx_PyFrame_SetLineNumber(py_frame, py_line);
