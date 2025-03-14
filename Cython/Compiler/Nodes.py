@@ -4184,11 +4184,14 @@ class DefNodeWrapper(FuncDefNode):
         code.putln('{')
         all_args = tuple(positional_args) + tuple(kw_only_args)
         non_posonly_args = [arg for arg in all_args if not arg.pos_only]
-        non_pos_args_id = ','.join(
-            ['&%s' % code.intern_identifier(arg.entry.name) for arg in non_posonly_args] + ['0'])
-        code.putln("PyObject ** const %s[] = {%s};" % (
-            Naming.pykwdlist_cname,
-            non_pos_args_id))
+        if non_posonly_args:
+            non_pos_args_id = ','.join([
+                '&%s' % code.intern_identifier(arg.entry.name)
+                for arg in non_posonly_args
+            ] + ['0'])
+            code.putln("PyObject ** const %s[] = {%s};" % (
+                Naming.pykwdlist_cname,
+                non_pos_args_id))
 
         # Before being converted and assigned to the target variables,
         # borrowed references to all unpacked argument values are
