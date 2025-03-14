@@ -4186,7 +4186,7 @@ class DefNodeWrapper(FuncDefNode):
         non_posonly_args = [arg for arg in all_args if not arg.pos_only]
         if non_posonly_args:
             non_pos_args_id = ','.join([
-                '&%s' % code.intern_identifier(arg.entry.name)
+                f'&{code.intern_identifier(arg.entry.name)}'
                 for arg in non_posonly_args
             ] + ['0'])
             code.putln("PyObject ** const %s[] = {%s};" % (
